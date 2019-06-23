@@ -12,7 +12,7 @@ type XField interface {
 
 type xForwardedByField []string
 
-func ForwardedBy(s string) XField {
+func By(s string) XField {
 	return xForwardedByField(strings.Split(s, ","))
 }
 
@@ -26,7 +26,7 @@ func (xf xForwardedByField) apply(elm *Element, i int) {
 
 type xForwardedForField []string
 
-func ForwardedFor(s string) XField {
+func For(s string) XField {
 	return xForwardedForField(strings.Split(s, ","))
 }
 
@@ -40,7 +40,7 @@ func (xf xForwardedForField) apply(elm *Element, i int) {
 
 type xForwardedHostField []string
 
-func ForwardedHost(s string) XField {
+func Host(s string) XField {
 	return xForwardedHostField(strings.Split(s, ","))
 }
 
@@ -54,7 +54,7 @@ func (xf xForwardedHostField) apply(elm *Element, i int) {
 
 type xForwardedProtoField []string
 
-func ForwardedProto(s string) XField {
+func Proto(s string) XField {
 	return xForwardedProtoField(strings.Split(s, ","))
 }
 

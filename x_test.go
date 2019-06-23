@@ -1,43 +1,45 @@
-package forwarded
+package forwarded_test
 
 import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/utisam/go-forwarded"
 )
 
 func TestFromX(t *testing.T) {
 	tests := []struct {
 		name    string
-		args    []XField
-		want    Forwarded
+		args    []forwarded.XField
+		want    forwarded.Forwarded
 		wantErr bool
 	}{
 		{
-			args: []XField{
-				ForwardedFor("203.0.113.1, 203.0.113.2"),
+			args: []forwarded.XField{
+				forwarded.For("203.0.113.1, 203.0.113.2"),
 			},
-			want: Forwarded{
+			want: forwarded.Forwarded{
 				{For: "203.0.113.1"},
 				{For: "203.0.113.2"},
 			},
 		},
 		{
 			name: "empty",
-			want: Forwarded{},
+			want: forwarded.Forwarded{},
 		},
 		{
 			name: "invalid length",
-			args: []XField{
-				ForwardedFor("203.0.113.1, 203.0.113.2"),
-				ForwardedHost("example.com"),
+			args: []forwarded.XField{
+				forwarded.For("203.0.113.1, 203.0.113.2"),
+				forwarded.Host("example.com"),
 			},
 			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := FromX(tt.args...)
+			got, err := forwarded.FromX(tt.args...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("FromX() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -50,11 +52,11 @@ func TestFromX(t *testing.T) {
 }
 
 func ExampleFromX() {
-	forwarded, _ := FromX(
-		ForwardedFor("203.0.113.1, 203.0.113.2"),
-		ForwardedHost("example.com, example.org"),
+	f, _ := forwarded.FromX(
+		forwarded.For("203.0.113.1, 203.0.113.2"),
+		forwarded.Host("example.com, example.org"),
 	)
-	fmt.Println("Forwarded: " + forwarded.String())
+	fmt.Println("Forwarded: " + f.String())
 	// Output:
 	// Forwarded: for=203.0.113.1;host=example.com,for=203.0.113.2;host=example.org
 }
@@ -62,40 +64,40 @@ func ExampleFromX() {
 func TestAlignX(t *testing.T) {
 	tests := []struct {
 		name string
-		args []XField
-		want Forwarded
+		args []forwarded.XField
+		want forwarded.Forwarded
 	}{
 		{
-			args: []XField{
-				ForwardedFor("203.0.113.1, 203.0.113.2"),
+			args: []forwarded.XField{
+				forwarded.For("203.0.113.1, 203.0.113.2"),
 			},
-			want: Forwarded{
+			want: forwarded.Forwarded{
 				{For: "203.0.113.1"},
 				{For: "203.0.113.2"},
 			},
 		},
 		{
 			name: "empty",
-			want: Forwarded{},
+			want: forwarded.Forwarded{},
 		},
 		{
 			name: "overwrite",
-			args: []XField{
-				ForwardedFor("203.0.113.1, 203.0.113.2"),
-				RealIP("198.51.100.1"),
+			args: []forwarded.XField{
+				forwarded.For("203.0.113.1, 203.0.113.2"),
+				forwarded.RealIP("198.51.100.1"),
 			},
-			want: Forwarded{
+			want: forwarded.Forwarded{
 				{For: "198.51.100.1"},
 				{For: "203.0.113.2"},
 			},
 		},
 		{
 			name: "different length",
-			args: []XField{
-				ForwardedHost("example.com"),
-				ForwardedFor("203.0.113.1, 203.0.113.2"),
+			args: []forwarded.XField{
+				forwarded.Host("example.com"),
+				forwarded.For("203.0.113.1, 203.0.113.2"),
 			},
-			want: Forwarded{
+			want: forwarded.Forwarded{
 				{For: "203.0.113.1", Host: "example.com"},
 				{For: "203.0.113.2"},
 			},
@@ -103,7 +105,7 @@ func TestAlignX(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := AlignX(tt.args...); !reflect.DeepEqual(got, tt.want) {
+			if got := forwarded.AlignX(tt.args...); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("AlignX() = %v, want %v", got, tt.want)
 			}
 		})

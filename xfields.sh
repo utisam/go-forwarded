@@ -7,7 +7,7 @@ function print_x_forwarded_field() {
 
 type xForwarded${K}Field []string
 
-func Forwarded${K}(s string) XField {
+func ${K}(s string) XField {
 	return xForwarded${K}Field(strings.Split(s, ","))
 }
 

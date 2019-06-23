@@ -63,10 +63,10 @@ func AlignX(fields ...XField) Forwarded {
 
 func AlignAllX(header http.Header) Forwarded {
 	return AlignX(
-		ForwardedBy(header.Get("X-Forwarded-By")),
-		ForwardedFor(header.Get("X-Forwarded-For")),
-		ForwardedHost(header.Get("X-Forwarded-Host")),
-		ForwardedProto(header.Get("X-Forwarded-Proto")),
+		By(header.Get("X-Forwarded-By")),
+		For(header.Get("X-Forwarded-For")),
+		Host(header.Get("X-Forwarded-Host")),
+		Proto(header.Get("X-Forwarded-Proto")),
 		RealHost(header.Get("X-Real-Host")),
 		RealIP(header.Get("X-Real-IP")),
 	)
