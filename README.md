@@ -1,6 +1,7 @@
 # Forwarded
 
 [![GoDoc](https://godoc.org/github.com/utisam/go-forwarded?status.svg)](https://godoc.org/github.com/utisam/go-forwarded)
+[![Build Status](https://travis-ci.com/utisam/go-forwarded.svg?branch=master)](https://travis-ci.com/utisam/go-forwarded)
 
 Forwarded HTTP header ([RFC7239](https://tools.ietf.org/html/rfc7239)).
 
